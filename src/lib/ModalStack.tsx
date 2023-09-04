@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useCallback, useMemo } from 'use-memo-one'
-import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
+import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform, Modal } from 'react-native'
 
 import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAction } from '../types'
 
@@ -82,25 +82,27 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     const hasPendingClosingAction = position === 1 && pendingClosingAction?.currentModalHash === stackItem.hash
 
     return (
-      <StackItem
-        {...props}
-        // @ts-ignore
-        stackItem={stackItem}
-        key={index}
-        zIndex={index + 1}
-        position={position}
-        hideBackdrop={hideBackdrop}
-        openModal={(...args) => {
+      <Modal transparent>
+        <StackItem
+          {...props}
           // @ts-ignore
-          props.openModal(...args)
-          setOpenActionCallbacks(state => [...state, stackItem.hash])
-        }}
-        isLastOpenedModal={isLastOpenedModal}
-        isFirstVisibleModal={isFirstVisibleModal}
-        wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
-        wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
-        pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
-      />
+          stackItem={stackItem}
+          key={index}
+          zIndex={index + 1}
+          position={position}
+          hideBackdrop={hideBackdrop}
+          openModal={(...args) => {
+            // @ts-ignore
+            props.openModal(...args)
+            setOpenActionCallbacks(state => [...state, stackItem.hash])
+          }}
+          isLastOpenedModal={isLastOpenedModal}
+          isFirstVisibleModal={isFirstVisibleModal}
+          wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
+          wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
+          pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
+        />
+      </Modal>
     )
   }
 
