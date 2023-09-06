@@ -82,12 +82,11 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     const hasPendingClosingAction = position === 1 && pendingClosingAction?.currentModalHash === stackItem.hash
 
     return (
-      <Modal transparent>
+      <Modal transparent key={index}>
         <StackItem
           {...props}
           // @ts-ignore
           stackItem={stackItem}
-          key={index}
           zIndex={index + 1}
           position={position}
           hideBackdrop={hideBackdrop}
